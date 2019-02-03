@@ -25,10 +25,10 @@ public class ChessMatch {
 	}
 	
 	private void initialStup() {
-		board.placePiece(new Rook(board,Color.WHITE),new Position(2,2));
+		board.placePiece(new Rook(board,Color.WHITE),new Position(0,2));
 		
-	
 		board.placePiece(new King(board,Color.WHITE),new Position(1,2));
+		
 		
 	}
 }
