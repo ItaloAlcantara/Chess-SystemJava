@@ -16,14 +16,14 @@ public abstract class Piece {
 	}
 	
 	//Method Rook: Methodo concreto que chama um abstrato;
-	public abstract boolean [][] possibleMove();
+	public abstract boolean [][] possibleMoves();
 	
 	public boolean possibleMove(Position position) {
-		return possibleMove()[position.getRow()][position.getColumn()];
+		return possibleMoves()[position.getRow()][position.getColumn()];
 	}
 	
 	public boolean isThereAnyPosibleMove() {
-		boolean [][] mat= possibleMove();
+		boolean [][] mat= possibleMoves();
 		
 		for (int i =0;i<mat.length;i++) {
 			for(int j=0;j<mat.length;j++) {

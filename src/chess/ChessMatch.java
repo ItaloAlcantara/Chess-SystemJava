@@ -1,5 +1,7 @@
 package chess;
 
+import java.awt.MultipleGradientPaint.CycleMethod;
+
 import boardgame.Board;
 import boardgame.Piece;
 import boardgame.Position;
@@ -9,10 +11,23 @@ import chess.pieces.Rook;
 public class ChessMatch {
 	
 	private Board board;
+	private int turn;
+	private Color currentPlayer;
+	
+	public int getTurn() {
+		return turn;
+	}
+	
+	public Color getCurrentPlayer() {
+		return currentPlayer;
+	}
+	
 	
 	public ChessMatch() {
 		board=new Board(8, 8);
 		initialStup();
+		currentPlayer=Color.WHITE;
+		turn=1;
 	}
 	public ChessPiece[][] getPieces(){
 		ChessPiece[][] mat = new ChessPiece[board.getRows()][board.getColumns()];
@@ -25,12 +40,19 @@ public class ChessMatch {
 		return mat;
 	}
 	
+	public boolean[][] possibleMoves(ChessPosition sourcePosition) {
+		Position position = sourcePosition.toPosition();
+		validateSourcePosition(position);
+		return board.piece(position).possibleMoves();
+	}
+	
 	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
 		Position source = sourcePosition.toPosition();
 		Position target = targetPosition.toPosition();
 		validateSourcePosition(source);
 		validateTargetPosition(source,target);
 		Piece capturedPiece = makeMove(source, target);
+		nextTurn();
 		return (ChessPiece)capturedPiece;
 	}
 
@@ -45,6 +67,9 @@ public class ChessMatch {
 		if (!board.thereIsAPiece(position)) {
 			throw new ChessException("There is no piece on source position");
 		}
+		if(currentPlayer !=((ChessPiece)board.piece(position)).getColor()) {
+			throw new ChessException("The chosen piece is not yours");
+		}
 		if(!board.piece(position).isThereAnyPosibleMove()) {
 			throw new ChessException("There isn't possible moves for the chose piece");
 		}
@@ -58,6 +83,11 @@ public class ChessMatch {
 	
 	private void placeNewPiece(char column,int row, ChessPiece piece) {
 		board.placePiece(piece, new ChessPosition(column, row).toPosition());
+	}
+	
+	private void nextTurn() {
+		turn++;
+		currentPlayer= (currentPlayer==Color.WHITE) ? Color.BLACK : Color.WHITE;
 	}
 	
 	private void initialStup() {
